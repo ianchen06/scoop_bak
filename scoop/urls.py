@@ -20,7 +20,7 @@ from webapp.views import ConnectionAutocomplete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('app/', include('webapp.urls')),
+    path('', include('webapp.urls')),
     path(
         'connection-autocomplete/',
         ConnectionAutocomplete.as_view(),

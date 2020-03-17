@@ -1,4 +1,4 @@
-from django.forms import ModelForm, ModelChoiceField
+from django.forms import ModelForm, ModelChoiceField, PasswordInput
 from dal import autocomplete
 
 from .models import Task, Connection
@@ -10,7 +10,9 @@ class ConnectionForm(ModelForm):
     class Meta:
         model = Connection 
         fields = '__all__'
-        #exclude = ('password',)
+        widgets = {
+                'password': PasswordInput()
+                }
 
 class TaskForm(ModelForm):
     def __init__(self, *args, **kwargs):
