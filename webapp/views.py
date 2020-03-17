@@ -1,11 +1,32 @@
+from django.views.generic import ListView
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from dal import autocomplete
+from django_tables2 import SingleTableView, SingleTableMixin
+from django_filters.views import FilterView
 
-from webapp.forms import TaskForm
+from webapp.forms import TaskForm, ConnectionForm
 from webapp.models import Task, Connection
+from webapp.tables import ConnectionTable
+from webapp.filters import ConnectionFilter
+
+def connection_filtered(request):
+    f = ConnectionFilter(request.GET, queryset=Connection.objects.all())
+    return render(request, 'webapp/cf.html', {'filter': f})
+
+class FilteredConnectionListView(SingleTableMixin, FilterView):
+    table_class = ConnectionTable
+    model = Connection
+    template_name = "webapp/connection.html"
+
+    filterset_class = ConnectionFilter
+
+class ConnectionListView(SingleTableView):
+    model = Connection
+    table_class = ConnectionTable
+    template_name = 'webapp/connection.html'
 
 class ConnectionAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -28,6 +49,21 @@ class ConnectionAutocomplete(autocomplete.Select2QuerySetView):
 def home(request):
     context = {}
     return render(request, 'webapp/index.html', context)
+
+def connection_create(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        form = ConnectionForm(request.POST, request.FILES)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            new_connection = form.save()
+            return HttpResponseRedirect(reverse('connection'))
+    else:
+        form = ConnectionForm()
+    return render(request, 'webapp/connection_create.html', {'form': form})
 
 def task(request):
     # if this is a POST request we need to process the form data

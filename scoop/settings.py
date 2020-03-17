@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'webapp',
-    'crispy_forms'
+    'crispy_forms',
+    'django_tables2',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -66,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'webapp.context_processors.site_meta'
             ],
         },
     },
@@ -128,3 +131,4 @@ STATICFILES_DIRS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+SITE_TITLE = "Scoop"

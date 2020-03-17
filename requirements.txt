@@ -1,3 +1,5 @@
 django
 django-crispy-forms
 django-autocomplete-light
+django-tables2
+django-filter

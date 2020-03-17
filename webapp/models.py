@@ -9,6 +9,10 @@ class ConnectionType(models.Model):
 class Connection(models.Model):
     connection_type = models.ForeignKey(ConnectionType, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    host = models.CharField(max_length=255)
+    port = models.IntegerField()
+    username = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
     def __str__(self):
         return self.name
 
