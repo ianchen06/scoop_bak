@@ -9,12 +9,15 @@ from django_filters.views import FilterView
 
 from webapp.forms import TaskForm, ConnectionForm
 from webapp.models import Task, Connection
-from webapp.tables import ConnectionTable
-from webapp.filters import ConnectionFilter
+from webapp.tables import ConnectionTable, TaskTable
+from webapp.filters import ConnectionFilter, TaskFilter
 
-def connection_filtered(request):
-    f = ConnectionFilter(request.GET, queryset=Connection.objects.all())
-    return render(request, 'webapp/cf.html', {'filter': f})
+class FilteredTaskListView(SingleTableMixin, FilterView):
+    table_class = TaskTable
+    model = Task
+    template_name = "webapp/task.html"
+
+    filterset_class = TaskFilter
 
 class FilteredConnectionListView(SingleTableMixin, FilterView):
     table_class = ConnectionTable
@@ -65,7 +68,7 @@ def connection_create(request):
         form = ConnectionForm()
     return render(request, 'webapp/connection_create.html', {'form': form})
 
-def task(request):
+def task_create(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         form = TaskForm(request.POST, request.FILES)
@@ -77,4 +80,4 @@ def task(request):
             return HttpResponseRedirect(reverse('home'))
     else:
         form = TaskForm()
-    return render(request, 'webapp/task.html', {'form': form})
+    return render(request, 'webapp/task_create.html', {'form': form})
